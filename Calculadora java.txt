@@ -1,0 +1,50 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+
+@WebServlet("/calculadora")
+public class CalculadoraServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        double num1 = Double.parseDouble(request.getParameter("num1"));
+        double num2 = Double.parseDouble(request.getParameter("num2"));
+        String operador = request.getParameter("operador");
+        double resultado = 0;
+        String mensagem = "";
+
+        switch (operador) {
+            case "+":
+                resultado = num1 + num2;
+                break;
+            case "-":
+                resultado = num1 - num2;
+                break;
+            case "*":
+                resultado = num1 * num2;
+                break;
+            case "/":
+                if (num2 != 0) {
+                    resultado = num1 / num2;
+                } else {
+                    mensagem = "Erro: divisão por zero!";
+                }
+                break;
+            default:
+                mensagem = "Operador inválido!";
+        }
+
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<html><body>");
+        if (!mensagem.isEmpty()) {
+            out.println("<h3>" + mensagem + "</h3>");
+        } else {
+            out.println("<h3>Resultado: " + resultado + "</h3>");
+        }
+        out.println("<a href='calculadora.html'>Voltar</a>");
+        out.println("</body></html>");
+    }
+}
